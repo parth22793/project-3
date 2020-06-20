@@ -1,0 +1,17 @@
+{% extends "orders/base_layout.html" %}
+
+<!-- This information fills in the center card -->
+{% block body %}
+    {% if message %}
+    <div class='center-align'>
+        {{message}}
+    </div>
+    {% endif %}
+    <span class="card-title center-align"><h4><b>Welcome to PiNOTchio's Pizza!</b></h4></span>
+    <br>
+    <span class="card-title center-align"><h4><b>Please make a selection from the menu.</b></h4></span>
+    <br>
+    <br>
+    <span class="card-title center-align"><h4><b>Oh, and always remember...</b></h4></span>
+    <span class="card-title center-align"><h4><b>Eat More Pizza!</b></h4></span>
+{% endblock %}

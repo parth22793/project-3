@@ -1,0 +1,32 @@
+{% extends "orders/base_layout.html" %}
+
+{% block body %}
+    {% if message %}
+        <div class='center-align'>
+            {{message}}
+        </div>
+    {% endif %}
+    <h4>Log in</h4>
+    <br>
+    <form action="{% url 'login' %}" method="POST">
+        {% csrf_token %}
+        <div class="row">
+            <div class="input-field">
+                <input name="username" type="text">
+                <label for="username">Username</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field">
+                <input name="password" type="password">
+                <label for="password">Password</label>
+            </div>
+        </div>
+        <button type="submit" class="btn green-btn">Login</button>
+    </form>
+    <hr>
+    <br>
+    <br>
+    <!-- Make these links white -->
+    <p><h4>New here?&nbsp;&nbsp;<a href="{% url 'register'%}" class="add">Register</a></h4></p>
+{% endblock %}

@@ -1,0 +1,72 @@
+/* Needed for flexbox and sticky footer */
+body {
+   display: flex;
+   min-height: 100vh;
+   flex-direction: column;
+}
+
+main {
+   flex: 1 0 auto;
+}
+
+/* Custom Green button to contrast on red background card */
+.green-btn{
+  background-color: #388E3C;  /* Green darken 2, from _color-variables.scss */
+}
+
+.green-btn:hover {
+  background: #43A047;  /* Lighten one shade on hover */
+}
+
+.green-btn:active {
+  background: #66BB6A;  /* Lighten another on click */
+}
+
+/* Make the + (add item) links white */
+a.add {
+  color: white;
+}
+
+/* Make the input forms look better now that we're using a dark background (red) wherever they type that in */
+
+/* label color */
+.input-field label {
+   color: #fff;
+ }
+
+ /* label focus color */
+ .input-field input[type=text]:focus + label {
+   color: #fff;
+ }
+ /* label underline focus color */
+ .input-field input[type=text]:focus {
+   border-bottom: 1px solid #fff;
+   box-shadow: 0 1px 0 0 #fff;
+ }
+ /* valid color */
+ /* .input-field input[type=text].valid {
+   border-bottom: 1px solid #000;
+   box-shadow: 0 1px 0 0 #000;
+ } */
+ /* invalid color */
+ /* .input-field input[type=text].invalid {
+   border-bottom: 1px solid #000;
+   box-shadow: 0 1px 0 0 #000;
+ } */
+  /* icon prefix focus color */
+ /* .input-field .prefix.active {
+   color: #fff;
+ } */
+
+/* Make white text for forms */
+.input-field [type=text] {
+   color: white;
+}
+
+.input-field [type=password] {
+   color: white;
+}
+
+.input-field [type=email] {
+  color: white;
+}

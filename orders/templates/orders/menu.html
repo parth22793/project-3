@@ -1,0 +1,66 @@
+{% extends "orders/base_layout.html" %}
+
+<!-- This information fills in the center card -->
+{% block body %}
+    <span class="card-title center-align"><h4><b>{{Active_Category}}</b></h4></span>
+    {# Toppings #}
+    {% if Active_Category == "Toppings" %}    {# Toppings don't have sizes or prices, item just refers to name! #}
+        <span class="center-align"><h5><b>{{Active_Category}}</b></h5></span>
+
+        <table class="centered">                        
+            <tbody>
+                <tr>
+                    {% for item in Menu %}
+                    {# Price for Toppings is 0.00 #}
+                    <td><span class="valign-wrapper"><a href="{% url 'add' Active_Category item.name 0.00 %}" class="add"><i class="material-icons small">add_box</i></a>{{item}}</span></td>
+                        {# If the forloop counter is divisible by 3, close table row and start a new one #}
+                        {% if forloop.counter|divisibleby:3 %}
+                            {# But don't add a blank row if this is the last element (whole list divisible by 3) #}
+                            {% if not forloop.last %}
+                </tr>
+                <tr>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                
+                    {# Now close off the last element and the table body #}
+                </tr>
+            </tbody>
+        </table>
+    {% else %} {# All other categories have a small and large.  Pasta and Salad just have large #}
+        <table class="centered">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Small</th>
+                    <th>Large</th>
+                </tr>
+            </thead>                            
+            <tbody>
+                
+                    {# Remember other models have more than just the name, so can't just use 'item' __str__ method, but 'item.name' #}
+
+                    {% for item in Menu %}
+                <tr>
+                    <td>{{item.name}}</td>
+                        {% if Active_Category == "Pasta" or Active_Category == "Salad" %}
+                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    <td><span class="valign-wrapper"><a href="{% url 'add' Active_Category item.name item.price %}" class="add"><i class="material-icons small">add_box</i></a>{{item.price}}</span></td>
+                        {% else %}
+                    <td><span class="valign-wrapper"><a href="{% url 'add' Active_Category item.name item.small %}" class="add"><i class="material-icons small">add_box</i></a>{{item.small}}</span></td>
+                    <td><span class="valign-wrapper"><a href="{% url 'add' Active_Category item.name item.large %}" class="add"><i class="material-icons small">add_box</i></a>{{item.large}}</span></td>
+                            {% if item.name == "Special" %}
+                            {# Add another row explaining that Special is unlimited toppings #}
+                </tr>
+                <tr>
+                    <td class='center-align'>(unlimited toppings)</td>
+                    <td></td>
+                    <td></td>
+                            {% endif %}
+                        {% endif %}
+                </tr>
+                    {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}

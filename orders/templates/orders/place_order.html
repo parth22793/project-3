@@ -1,0 +1,64 @@
+{% extends "orders/base_layout.html" %}
+
+{# Need to load static again even though we extended base_layout.html, which does it #}
+{# https://docs.djangoproject.com/en/2.0/ref/templates/language/#custom-libraries-and-template-inheritance #}
+
+{% load static %}
+
+{% block custom_styling %}
+    <!-- Stripe CSS styling -->
+    <link rel="stylesheet" href="{% static 'orders/css/stripe.css' %}">
+{% endblock %}
+
+<!-- This information fills in the center card -->
+{% block body %}
+    <span class="card-title center-align"><h5><b>Confirm Place Order?</b></h5></span>
+    <span class="card-title center-align"><h6>Order #{{order_number}}</h6></span>
+    <br>
+    <ul>
+        <li><hr></li>
+        {% for cat in Item_Categories %}
+        {# Django prints list items like ('Subs',) and we need to strip those extra chars #}
+        {# https://docs.djangoproject.com/en/2.2/ref/templates/builtins/ #}
+        <li><h6><b>{{cat|cut:"("|cut:"'"|cut:","|cut:")"}}</b></h6></li>
+            {% for row in Items %}
+                {% if row.category == cat|cut:"("|cut:"'"|cut:","|cut:")" %}
+        <li>${{row.price}}  {{row.name}}</li>
+                {% endif %}
+            {% endfor %}
+        <li><hr></li>
+        {% endfor %}
+        <li><h6><b>TOTAL: ${{Total|floatformat:2|default:"0.00"}}</b></h6></li>
+    </ul>
+
+    {# Collecting Credit Card details on Client side #}
+    {# https://stripe.com/docs/payments/cards/collecting/web #}
+    <form action="{% url 'confirm_order' order_number %}" method="post" id="payment-form">
+        {% csrf_token %}
+        <div class="form-row">
+            <label for="card-element">
+            Credit or debit card
+            </label>
+            <div id="card-element">
+            <!-- A Stripe Element will be inserted here. -->
+            </div>
+
+            <!-- Used to display form errors. -->
+            <div id="card-errors" role="alert"></div>
+        </div>
+        <button class="waves-effect waves-light btn-large green-btn">Place Order</button>
+        <a href="{% url 'index' %}" class="waves-effect waves-light btn-large">Cancel</a>
+    </form>
+
+    <!-- <a href="{% url 'confirm_order' order_number %}" class="waves-effect waves-light btn-large green-btn">Place Order</a> -->
+    <!-- <a href="{% url 'index' %}" class="waves-effect waves-light btn-large">Cancel</a> -->
+{% endblock %}
+
+{# Only need this on place_order page #}
+{% block custom_scripts %}
+    <!-- Stripe JS that creates the token -->
+    <script src="https://js.stripe.com/v3/"></script>
+
+    <!-- Client side script that connects event listeners -->
+    <script src="{% static 'orders/js/stripe-client.js' %}"></script>
+{% endblock %}

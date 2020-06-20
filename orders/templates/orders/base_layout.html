@@ -1,0 +1,138 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>PiNOTchio's Pizzeria</title>
+
+        <link rel='icon' href="{% static 'orders/pizza.ico' %}" type='image/x-icon'/>
+
+        <!-- Good tutorial on customizing Materialize colors with Sass:
+        https://ghariaonline.wordpress.com/2016/03/14/materialize-css-changing-default-theme-with-sass/ 
+        And good site to visualize colors:
+        https://materialmixer.co/#43A047/DD2C00 -->
+
+        <!-- Compiled and minified CSS -->
+        <link rel="stylesheet" href="{% static 'orders/css/materialize.min.css' %}">
+
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="{% static 'orders/css/custom.css' %}">
+
+        {% block custom_styling %}
+        {% endblock %}
+                
+        <!-- To use Materialize icons -->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    </head>
+
+    <body>
+        
+        <header>
+            <div class="navbar-fixed">
+                <nav>
+                <div class="nav-wrapper">
+                    <a href="{% url 'index' %}" class="brand-logo left hide-on-small-only"><img src="{% static 'orders/pin_logo_lg.gif' %}" height="90"></a>
+                    <a href="{% url 'index' %}" class="brand-logo left hide-on-med-and-up"><img src="{% static 'orders/pin_logo_sm.gif' %}" height="60"></a>
+
+                    <!-- This is the list for when tablets or desktop -->
+                    {% if username %}
+                        <!-- Only show when user is logged in -->
+                        <ul id="nav-tablet-and-up" class="right hide-on-med-and-down">
+                            <li>{{username}}</li>
+                            <li><a href="{% url 'logout' %}">Logout</a></li>
+                        </ul>
+                        
+                        <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>      
+                    {% endif %}
+                </div>
+                </nav>
+            </div>
+        </header>
+        
+        <!-- This is the list for when on mobile -->
+        <ul id="nav-mobile" class="sidenav">
+            <li><a class="sidenav-close" href='#'>{{username}}</a></li>
+            <li><a href="{% url 'logout' %}">Logout</a></li>
+        </ul>
+       
+        <main>
+            <div class="container">
+                <div class="row">
+                    <div class="col s12 m3">
+                        {% if username %}  {# Only show menu categories if user logged in #}
+                            {% if not place_order_view %}   {# Don't show menu on the side when confirming order #}
+                                <h4><b>Selections</b></h4>
+                                <ul>
+                                    {% for category in Categories %}
+                                        <li><a href="{% url 'menu' category %}" class="waves-effect waves-light btn-large btn-flat">{{category}}</a></li>
+                                        <!-- <li><a class="waves-effect waves-light btn-large btn-flat">Sicilian Pizza</a></li> -->
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        {% endif %}
+                    </div>  <!-- end col -->
+
+                    <div class="col s12 m6">
+                        <div class="card red darken-3">
+                            <div class="card-content white-text">
+                                <!-- Insert content for card here -->
+                                {% block body%}
+                                {% endblock %}    
+                            </div>
+                        </div>
+                    </div>  <!-- end col -->
+
+                    <div class="col s12 m3">
+                        {% if username %}  {# Only show shopping cart if user logged in #}
+                            {% if not place_order_view %}   {# Don't show cart on the side when confirming order #}
+                                <h4 class="center-align"><b>Your Cart</b></h4>
+                                <h6 class="center-align">Order #{{order_number}}</h6>
+                                <ul>
+                                    <li><hr></li>
+                                    {% for cat in Item_Categories %}
+                                    {# Django prints list items like ('Subs',) and we need to strip those extra chars #}
+                                    {# https://docs.djangoproject.com/en/2.2/ref/templates/builtins/ #}
+                                    <li><h6><b>{{cat|cut:"("|cut:"'"|cut:","|cut:")"}}</b></h6></li>
+                                        {% for row in Items %}
+                                            {% if row.category == cat|cut:"("|cut:"'"|cut:","|cut:")" %}
+                                    <li>${{row.price}}  {{row.name}}</li>
+                                            {% endif %}
+                                        {% endfor %}
+                                    <li><hr></li>
+                                    {% endfor %}
+                                    {% if Item_Categories %}  {# Only show cart total and button if cart has items #}
+                                        <li><h5><b>TOTAL: ${{Total|floatformat:2|default:"0.00"}}</b></h5></li>
+                                    {% endif %}
+                                </ul>
+                                {% if Item_Categories %}
+                                    <a href="{% url 'place_order' order_number %}" class="waves-effect waves-light btn-large">Place Order</a>
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+                    </div>  <!-- end col -->                        
+                </div>  <!-- end row -->
+            </div>   <!-- end container -->
+        </main>
+
+        <footer class="page-footer">
+            <div class="footer-copyright">
+                <div class="container">
+                    © 2019 PiNOTchio's Pizzeria for CS50 Web
+                    <a class="grey-text text-lighten-4 right" href="#!">123 Fake Street, Cambridge, MA</a>
+                </div>
+            </div>
+        </footer>
+
+    </body>
+
+    <!-- Scripts at end for optimized loading -->
+    <script src="{% static 'orders/js/jquery-2.1.1.min.js' %}"></script>
+    <script src="{% static 'orders/js/materialize.min.js' %}"></script>
+    <script src="{% static 'orders/js/custom.js' %}"></script>
+
+    {% block custom_scripts %}
+    {% endblock %}
+
+</html>

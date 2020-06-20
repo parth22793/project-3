@@ -1,0 +1,56 @@
+{% extends "orders/base_layout.html" %}
+
+{% block body %}
+    {% if message %}
+        <div class='center-align'>
+            {{message}}
+        </div>
+    {% endif %}
+    <h4>Please register below</h4>
+    <br>
+    <form action="{% url 'register' %}" method="POST">
+        {% csrf_token %}
+        <div class="row">
+            <div class="input-field">
+                <input name="first_name" type="text">
+                <label for="first_name">First Name</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field">
+                <input name="last_name" type="text">
+                <label for="last_name">Last Name</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field">
+                <input name="email" type="email">
+                <label for="email">Email</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field">
+                <input name="username" type="text">
+                <label for="username">Username</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field">
+                <input name="password" type="password">
+                <label for="password">Password</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field">
+                <input name="password_repeat" type="password">
+                <label for="password_repeat">Repeat Password</label>
+            </div>
+        </div>
+        <button type="submit" class="btn green-btn">Register</button>
+    </form>
+    <hr>
+    <br>
+    <br>
+    <!-- Make these links white -->
+    <p><h4>Already registered?&nbsp;&nbsp;<a href="{% url 'index'%}" class="add">Login</a></h4></p>
+{% endblock %}
